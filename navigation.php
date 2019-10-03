@@ -9,13 +9,16 @@
             <span class="icon-bar"></span>
             </button>
 
-            <a class="navbar-brand" href="<?php echo $home_url; ?>">Your Site</a>
+            <a class="navbar-brand" href="<?php echo $home_url; ?>">Blog</a>
         </div>
 
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li <?php echo $page_title=="Index" ? "class='active'" : ""; ?>>
                     <a href="<?php echo $home_url; ?>">Home</a>
+                </li>
+                <li>
+                  <a href="<?php echo $home_url; ?>users.php">Users</a>
                 </li>
             </ul>
 

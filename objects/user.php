@@ -54,6 +54,60 @@ class User {
     }
     return false;
   }
+  function create() {
+
+    $this->created = date('Y-m-d H:i:s');
+
+    $query = "INSERT INTO
+               " . $this->table_name . "
+               SET
+               firstname = :firstname,
+               lastname = :lastname,
+               email = :email,
+               contact_number = :contact_number,
+               address = :address,
+               password = :password,
+               access_level = :access_level,
+               status = :status,
+               created = :created";
+
+    $stmt = $this->conn->prepare($query);
+
+    $this->firstname=htmlspecialchars(strip_tags($this->firstname));
+    $this->lastname=htmlspecialchars(strip_tags($this->lastname));
+    $this->email=htmlspecialchars(strip_tags($this->email));
+    $this->contact_number=htmlspecialchars(strip_tags($this->contact_number));
+    $this->address=htmlspecialchars(strip_tags($this->address));
+    $this->password=htmlspecialchars(strip_tags($this->password));
+    $this->access_level=htmlspecialchars(strip_tags($this->access_level));
+    $this->status=htmlspecialchars(strip_tags($this->status));
+
+
+    $stmt->bindParam(':firstname', $this->firstname);
+    $stmt->bindParam(':lastname', $this->lastname);
+    $stmt->bindParam(':email', $this->email);
+    $stmt->bindParam(':contact_number', $this->contact_number);
+    $stmt->bindParam(':address', $this->address);
+
+    $password_hash = password_hash($this->password, PASSWORD_BCRYPT);
+    $stmt->bindParam(':password', $password_hash);
+
+    $stmt->bindParam(':access_level', $this->access_level);
+    $stmt->bindParam(':status', $this->status);
+    $stmt->bindParam(':created', $this->created);
+
+    if($stmt->execute()){
+        return true;
+    } else {
+        $this->showError($stmt);
+        return false;
+    }
+  }
+  public function showError($stmt){
+    echo "<pre>";
+        print_r($stmt->errorInfo());
+    echo "</pre>";
+  }
 }
 
 
