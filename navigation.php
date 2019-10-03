@@ -18,7 +18,7 @@
                     <a href="<?php echo $home_url; ?>">Home</a>
                 </li>
                 <li>
-                  <a href="<?php echo $home_url; ?>users.php">Users</a>
+                  <a href="<?php echo $home_url; ?>read_users.php">Users</a>
                 </li>
             </ul>
 

@@ -108,7 +108,7 @@ class User {
         print_r($stmt->errorInfo());
     echo "</pre>";
   }
-  function readAll($from_record_num, $records_per_page) {
+function readAll($from_record_num, $records_per_page) {
 
   $query = "SELECT
                 id,
@@ -122,7 +122,7 @@ class User {
             ORDER BY id DESC
             LIMIT ?, ?";
 
-    $stmt = $this->conn->prepare( $query );
+    $stmt = $this->conn->prepare($query);
 
     $stmt->bindParam(1, $from_record_num, PDO::PARAM_INT);
     $stmt->bindParam(2, $records_per_page, PDO::PARAM_INT);
@@ -130,6 +130,18 @@ class User {
     $stmt->execute();
 
     return $stmt;
+  }
+  public function countAll() {
+
+    $query = "SELECT id FROM " . $this->table_name . "";
+
+    $stmt = $this->conn->prepare($query);
+
+    $stmt->execute();
+
+    $num = $stmt->rowCount();
+
+    return $num;
   }
 }
 
