@@ -45,7 +45,7 @@ if($_POST) {
     echo "</div>";
 
     // empty posted values
-    $_POST=array();
+    $_POST = array();
 
     } else{
       echo "<div class='alert alert-danger' role='alert'>Unable to register. Please try again.</div>";

@@ -14,7 +14,7 @@
 
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li <?php echo $page_title=="Index" ? "class='active'" : ""; ?>>
+                <li <?php echo $page_title=="Home" ? "class='active'" : ""; ?>>
                     <a href="<?php echo $home_url; ?>">Home</a>
                 </li>
                 <li>

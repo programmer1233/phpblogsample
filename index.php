@@ -1,7 +1,7 @@
 <?php
 include_once "config/core.php";
 
-$page_title = "Index";
+$page_title = "Home";
 
 $require_login = true;
 include_once "login_checker.php";

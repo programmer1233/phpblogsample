@@ -108,6 +108,29 @@ class User {
         print_r($stmt->errorInfo());
     echo "</pre>";
   }
+  function readAll($from_record_num, $records_per_page) {
+
+  $query = "SELECT
+                id,
+                firstname,
+                lastname,
+                email,
+                contact_number,
+                access_level,
+                created
+            FROM " . $this->table_name . "
+            ORDER BY id DESC
+            LIMIT ?, ?";
+
+    $stmt = $this->conn->prepare( $query );
+
+    $stmt->bindParam(1, $from_record_num, PDO::PARAM_INT);
+    $stmt->bindParam(2, $records_per_page, PDO::PARAM_INT);
+
+    $stmt->execute();
+
+    return $stmt;
+  }
 }
 
 
