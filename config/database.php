@@ -5,15 +5,16 @@ class Database {
   private $db_name = "php_login_system";
   private $username = "root";
   private $password = "root";
-  public $conn;
+  private $conn;
 
+  // get database credentials
   public function getConnection() {
 
     $this->conn = null;
 
     try {
       $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name, $this->username, $this->password);
-    } catch(PDOExcpetion $exception) {
+    } catch(PDOException $exception) {
       echo "Connection error: " . $exception->getMessage();
     }
     return $this->conn;
