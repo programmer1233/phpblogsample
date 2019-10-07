@@ -11,8 +11,8 @@ class User {
   public $email;
   public $contact_number;
   public $address;
+  public $type_of_developer;
   public $password;
-  public $image;
   public $access_level;
   public $access_code;
   public $status;
@@ -116,6 +116,7 @@ function readAll($from_record_num, $records_per_page) {
                 lastname,
                 email,
                 contact_number,
+                type_of_developer,
                 access_level,
                 created
             FROM " . $this->table_name . "
