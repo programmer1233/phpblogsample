@@ -43,7 +43,7 @@ if($_POST) {
   else {
     echo "<div class='alert alert-danger alert-dismissable'>";
       echo "Unable to create user.";
-    echo "</div>";  
+    echo "</div>";
   }
 }
 
@@ -77,7 +77,7 @@ if($_POST) {
 
      <tr>
        <td>Contact Number</td>
-       <td><input type="text" name="contact_number" value="<?php $user->contact_number; ?>" class="form-control"></td>
+       <td><input type="number" name="contact_number" value="<?php $user->contact_number; ?>" class="form-control"></td>
      </tr>
 
      <tr>
