@@ -20,6 +20,9 @@
                 <li>
                   <a href="<?php echo $home_url; ?>read_users.php">Users</a>
                 </li>
+                <li>
+                  <a href="<?php echo $home_url; ?>create_user.php">Create User</a>
+                </li>
             </ul>
 
             <?php

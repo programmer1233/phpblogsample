@@ -8,7 +8,7 @@ if($num > 0){
         echo "<th>Firstname</th>";
         echo "<th>Lastname</th>";
         echo "<th>Email</th>";
-        echo "<th>Type Of Developer</th>";
+        echo "<th>Technology</th>";
         echo "<th>Contact Number</th>";
         echo "<th>Actions</th>";
     echo "</tr>";
@@ -20,7 +20,7 @@ if($num > 0){
             echo "<td>{$firstname}</td>";
             echo "<td>{$lastname}</td>";
             echo "<td>{$email}</td>";
-            echo "<td>{$type_of_developer}</td>";
+            echo "<td>{$technology}</td>";
             echo "<td>{$contact_number}</td>";
 
             echo "<td>";

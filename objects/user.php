@@ -11,7 +11,8 @@ class User {
   public $email;
   public $contact_number;
   public $address;
-  public $type_of_developer;
+  public $category_id;
+  public $technology;
   public $password;
   public $access_level;
   public $access_code;
@@ -73,14 +74,14 @@ class User {
 
     $stmt = $this->conn->prepare($query);
 
-    $this->firstname=htmlspecialchars(strip_tags($this->firstname));
-    $this->lastname=htmlspecialchars(strip_tags($this->lastname));
-    $this->email=htmlspecialchars(strip_tags($this->email));
-    $this->contact_number=htmlspecialchars(strip_tags($this->contact_number));
-    $this->address=htmlspecialchars(strip_tags($this->address));
-    $this->password=htmlspecialchars(strip_tags($this->password));
-    $this->access_level=htmlspecialchars(strip_tags($this->access_level));
-    $this->status=htmlspecialchars(strip_tags($this->status));
+    $this->firstname = htmlspecialchars(strip_tags($this->firstname));
+    $this->lastname = htmlspecialchars(strip_tags($this->lastname));
+    $this->email = htmlspecialchars(strip_tags($this->email));
+    $this->contact_number = htmlspecialchars(strip_tags($this->contact_number));
+    $this->address = htmlspecialchars(strip_tags($this->address));
+    $this->password = htmlspecialchars(strip_tags($this->password));
+    $this->access_level = htmlspecialchars(strip_tags($this->access_level));
+    $this->status = htmlspecialchars(strip_tags($this->status));
 
 
     $stmt->bindParam(':firstname', $this->firstname);
@@ -116,7 +117,7 @@ function readAll($from_record_num, $records_per_page) {
                 lastname,
                 email,
                 contact_number,
-                type_of_developer,
+                technology,
                 access_level,
                 created
             FROM " . $this->table_name . "
@@ -143,6 +144,99 @@ function readAll($from_record_num, $records_per_page) {
     $num = $stmt->rowCount();
 
     return $num;
+  }
+  function readOne() {
+
+    $query = "SELECT
+                firstname, lastname, email, technology, category_id, contact_number
+              FROM
+              " . $this->table_name . "
+              WHERE id = ?
+              LIMIT
+                 0,1";
+
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(1, $this->id);
+    $stmt->execute();
+
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $this->firstname = $row['firstname'];
+    $this->lastname = $row['lastname'];
+    $this->email = $row['email'];
+    $this->technology = $row['technology'];
+    $this->category_id = $row['category_id'];
+    $this->contact_number = $row['contact_number'];
+  }
+  function createUser() {
+    $query = "INSERT INTO
+                 " . $this->table_name . "
+              SET
+                 firstname = :firstname,
+                 lastname = :lastname,
+                 email = :email,
+                 technology = :technology,
+                 contact_number = :contact_number,
+                 category_id = :category_id";
+
+    $stmt = $this->conn->prepare($query);
+
+    $this->firstname = htmlspecialchars(strip_tags($this->firstname));
+    $this->lastname = htmlspecialchars(strip_tags($this->lastname));
+    $this->email = htmlspecialchars(strip_tags($this->email));
+    $this->technology = htmlspecialchars(strip_tags($this->technology));
+    $this->contact_number = htmlspecialchars(strip_tags($this->contact_number));
+    $this->category_id = htmlspecialchars(strip_tags($this->category_id));
+
+    $stmt->bindParam(":firstname", $this->firstname);
+    $stmt->bindParam(":lastname", $this->lastname);
+    $stmt->bindParam(":email", $this->email);
+    $stmt->bindParam(":technology", $this->technology);
+    $stmt->bindParam(":contact_number", $this->contact_number);
+    $stmt->bindParam(":category_id", $this->category_id);
+
+    if($stmt->execute()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  function update() {
+
+    $query = "UPDATE
+                  " . $this->table_name . "
+              SET
+                firstname = :firstname,
+                lastname = :lastname,
+                email = :email,
+                technology = :technology,
+                contact_number = :contact_number,
+                category_id = :category_id
+              WHERE
+               id = :id";
+
+    $stmt = $this->conn->prepare($query);
+
+    $this->firstname = htmlspecialchars(strip_tags($this->firstname));
+    $this->lastname = htmlspecialchars(strip_tags($this->lastname));
+    $this->email = htmlspecialchars(strip_tags($this->email));
+    $this->technology = htmlspecialchars(strip_tags($this->technology));
+    $this->contact_number = htmlspecialchars(strip_tags($this->contact_number));
+    $this->category_id = htmlspecialchars(strip_tags($this->category_id));
+    $this->id = htmlspecialchars(strip_tags($this->id));
+
+    $stmt->bindParam(':firstname', $this->firstname);
+    $stmt->bindParam(':lastname', $this->lastname);
+    $stmt->bindParam(':email', $this->email);
+    $stmt->bindParam(':technology', $this->technology);
+    $stmt->bindParam(':contact_number', $this->contact_number);
+    $stmt->bindParam(':category_id', $this->category_id);
+    $stmt->bindParam(':id', $this->id);
+
+    if($stmt->execute()) {
+      return true;
+    }
+    return false;
   }
 }
 

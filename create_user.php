@@ -1,5 +1,4 @@
 <?php
-$id = isset($_GET['id']) ? $_GET['id'] : die('ERROR: missing ID');
 
 include_once 'config/database.php';
 include_once 'objects/user.php';
@@ -11,21 +10,16 @@ $db = $database->getConnection();
 $user = new User($db);
 $category = new Category($db);
 
-$user->id = $id;
-
-$user->readOne();
-
-$page_title = "Update User";
+$page_title = "Create User";
 
 include_once "layout_head.php";
 
 echo "<div class='right-button-margin'>";
- echo "<a href='index.php' class='btn btn-default pull-right'>Read Users</a>";
+  echo "<a href='index.php' class='btn btn-default pull-right'> Home </a>";
 echo "</div>";
 ?>
 
 <?php
-
 if($_POST) {
 
   $user->firstname = $_POST['firstname'];
@@ -33,24 +27,19 @@ if($_POST) {
   $user->email = $_POST['email'];
   $user->technology = $_POST['technology'];
   $user->contact_number = $_POST['contact_number'];
-  $user->category_id = $_POST['category_id'];
+  $user->category = $_POST['category'];
 
-  if($user->update()) {
-    echo "<div class='alert alert-success alert-dismissable'>";
-      echo "User was created.";
-    echo "</div>";
+  if($user->createUser()) {
+    echo "<div class='alert alert-success'>User was created.</div>";
   }
   else {
-    echo "<div class='alert alert-danger alert-dismissable'>";
-      echo "Unable to create user.";
-    echo "</div>";  
+    echo "<div class='alert alert-danger'>Unable to create user.</div>";
   }
 }
 
 
 
  ?>
-
 
 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$id}"); ?>" method="post">
    <table class='table table-hover table-responsive table-bordered'>
@@ -87,20 +76,15 @@ if($_POST) {
           $stmt = $category->read();
 
           echo "<select class='form-control' name='category_id'>";
+            echo "<option>Select Category...</option>";
 
-            echo "<option>Please Select...</option>";
             while($row_category = $stmt->fetch(PDO::FETCH_ASSOC)) {
-              $category_id = $row_category['id'];
-              $category_name = $row_category['name'];
-
-              if($user->category_id == $category_id) {
-                echo "<option value='$category_id' selected>";
-              } else {
-                echo "<option value='$category_id'>";
-              }
-              echo "$category_name</option>";
+              extract($row_category);
+              echo "<option value='{$id}'>{$name}</option>";
             }
+
             echo "</select>";
+
           ?>
        </td>
      </tr>
@@ -119,4 +103,4 @@ if($_POST) {
 include_once "layout_foot.php";
 
 
-?>
+ ?>
