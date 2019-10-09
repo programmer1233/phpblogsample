@@ -61,6 +61,13 @@ echo "<table class='table table-hover table-responsive table-bordered'>";
       echo "</td>";
     echo "</tr>";
 
+    echo "<tr>";
+      echo "<td>Image</td>";
+      echo "<td>";
+        echo $user->image ? "<img src = 'uploads/{$product->image}' style='width:300px;' /> " : "No image found.";
+      echo "</td>";
+    echo "</tr>";
+
 echo "</table>";
 
 

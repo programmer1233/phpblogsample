@@ -1,6 +1,24 @@
 <?php
 
-if($num > 0){
+echo "<form role='search' action='search.php'>";
+    echo "<div class='input-group col-md-3 pull-left margin-right-1em'>";
+        $search_value = isset($search_term) ? "value='{$search_term}'" : "";
+        echo "<input type='text' class='form-control' placeholder='Type user firstname...' name='s' id='srch-term' required {$search_value} />";
+        echo "<div class='input-group-btn'>";
+            echo "<button class='btn btn-primary' type='submit'><i class='glyphicon glyphicon-search'></i></button>";
+        echo "</div>";
+    echo "</div>";
+echo "</form>";
+
+// create product button
+echo "<div class='right-button-margin'>";
+    echo "<a href='create_user.php' class='btn btn-primary pull-right'>";
+        echo "<span class='glyphicon glyphicon-plus'></span> Create User";
+    echo "</a>";
+echo "</div>";
+
+
+if($total_rows > 0){
 
     echo "<table class='table table-hover table-responsive table-bordered'>";
 
@@ -13,7 +31,8 @@ if($num > 0){
         echo "<th>Actions</th>";
     echo "</tr>";
 
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+      while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+
         extract($row);
 
         echo "<tr>";
@@ -42,16 +61,11 @@ if($num > 0){
 
     echo "</table>";
 
-    $page_url="read_users.php?";
-    $total_rows = $user->countAll();
-
     include_once 'paging.php';
 }
 
 else {
-    echo "<div class='alert alert-danger'>
-        <strong>No users found.</strong>
-    </div>";
+    echo "<div class='alert alert-danger'>No users found.</div>";
 }
 
 

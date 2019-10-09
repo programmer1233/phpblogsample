@@ -27,10 +27,13 @@ if($_POST) {
   $user->email = $_POST['email'];
   $user->technology = $_POST['technology'];
   $user->contact_number = $_POST['contact_number'];
-  $user->category = $_POST['category'];
+  $user->category_id = $_POST['category_id'];
+  $image = !empty($_FILES["image"]["name"]) ? sha1_file($_FILES['image']['tmp_name']) . "-" . basename($_FILES["image"]["name"]) : "";
+  $user->image = $image;
 
   if($user->createUser()) {
     echo "<div class='alert alert-success'>User was created.</div>";
+    echo $user->uploadPhoto();
   }
   else {
     echo "<div class='alert alert-danger'>Unable to create user.</div>";
@@ -41,7 +44,7 @@ if($_POST) {
 
  ?>
 
-<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$id}"); ?>" method="post">
+<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$id}"); ?>" method="post" enctpye="multipart/form-data">
    <table class='table table-hover table-responsive table-bordered'>
 
      <tr>
@@ -87,6 +90,11 @@ if($_POST) {
 
           ?>
        </td>
+     </tr>
+
+     <tr>
+       <td>Photo</td>
+       <td><input type="file" name="image"></td>
      </tr>
 
      <tr>

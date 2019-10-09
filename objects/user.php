@@ -13,6 +13,7 @@ class User {
   public $address;
   public $category_id;
   public $technology;
+  public $image;
   public $password;
   public $access_level;
   public $access_code;
@@ -148,7 +149,7 @@ function readAll($from_record_num, $records_per_page) {
   function readOne() {
 
     $query = "SELECT
-                firstname, lastname, email, technology, category_id, contact_number
+                firstname, lastname, email, technology, category_id, contact_number, image
               FROM
               " . $this->table_name . "
               WHERE id = ?
@@ -167,6 +168,7 @@ function readAll($from_record_num, $records_per_page) {
     $this->technology = $row['technology'];
     $this->category_id = $row['category_id'];
     $this->contact_number = $row['contact_number'];
+    $this->image = $row['image'];
   }
   function createUser() {
     $query = "INSERT INTO
@@ -177,6 +179,7 @@ function readAll($from_record_num, $records_per_page) {
                  email = :email,
                  technology = :technology,
                  contact_number = :contact_number,
+                 image = :image,
                  category_id = :category_id";
 
     $stmt = $this->conn->prepare($query);
@@ -186,6 +189,7 @@ function readAll($from_record_num, $records_per_page) {
     $this->email = htmlspecialchars(strip_tags($this->email));
     $this->technology = htmlspecialchars(strip_tags($this->technology));
     $this->contact_number = htmlspecialchars(strip_tags($this->contact_number));
+    $this->image = htmlspecialchars(strip_tags($this->image));
     $this->category_id = htmlspecialchars(strip_tags($this->category_id));
 
     $stmt->bindParam(":firstname", $this->firstname);
@@ -193,6 +197,7 @@ function readAll($from_record_num, $records_per_page) {
     $stmt->bindParam(":email", $this->email);
     $stmt->bindParam(":technology", $this->technology);
     $stmt->bindParam(":contact_number", $this->contact_number);
+    $stmt->bindParam(":image", $this->image);
     $stmt->bindParam(":category_id", $this->category_id);
 
     if($stmt->execute()) {
@@ -250,6 +255,114 @@ function readAll($from_record_num, $records_per_page) {
     } else {
       return false;
     }
+  }
+  public function search($search_term, $from_record_num, $records_per_page) {
+
+    $query = "SELECT
+                c.name as category_name, u.id, u.firstname, u.lastname, u.email, u.technology, u.contact_number
+            FROM
+                " . $this->table_name . " u
+                LEFT JOIN
+                    categories c
+                        ON u.category_id = c.id
+            WHERE
+                u.firstname LIKE ? OR u.technology LIKE ?
+            ORDER BY
+                u.firstname ASC
+            LIMIT
+                ?, ?";
+
+   $stmt = $this->conn->prepare($query);
+
+   $search_term = "%{$search_term}%";
+   $stmt->bindParam(1, $search_term);
+   $stmt->bindParam(2, $search_term);
+   $stmt->bindParam(3, $search_term, PDO::PARAM_INT);
+   $stmt->bindParam(4, $search_term, PDO:: PARAM_INT);
+
+   $stmt->execute();
+
+   return $stmt;
+  }
+  public function countAll_BySearch($search_term) {
+
+    $query = "SELECT
+                COUNT(*) as total_rows
+            FROM
+                " . $this->table_name . " u
+                LEFT JOIN
+                    categories c
+                        ON u.category_id = c.id
+            WHERE
+                u.firstname LIKE ?";
+
+   $stmt = $this->conn->prepare($query);
+
+   $search_term = "%{$search_term}%";
+
+   $stmt->bindParam(1, $search_term);
+
+   $stmt->execute();
+
+   $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+   return $row['total_rows'];
+  }
+  function uploadPhoto() {
+
+    $result_message = "";
+
+    if($this->image) {
+
+      $target_directory = "uploads/";
+      $target_file = $target_directory . $this->image;
+      $file_type = pathinfo($target_file, PATHINFO_EXTENSION);
+
+      $file_upload_error_messages = "";
+
+      $check = getimagesize($_FILES["image"]["tmp_name"]);
+
+      if($check !== false) {
+        // submitted file is an image
+      } else {
+        $file_upload_error_messages .="<div>Submitted file is not an image.</div>";
+      }
+
+      $allowed_file_types = array("jpg", "jpeg", "png", "gif");
+      if(!in_array($file_type, $allowed_file_types)) {
+        $file_upload_error_messages.="<div>Only JPG, JPEG, PNG, GIF files are allowed.</div>";
+      }
+
+      if(file_exists($target_file)) {
+         $file_upload_error_messages.="<div>Image already exists. Try to change file name.</div>";
+      }
+
+      if($_FILES['image']['size'] > (1024000)) {
+        $file_upload_error_messages.="<div>Image must be less than 1 MB in size.</div>";
+      }
+
+      if(!is_dir($target_directory)) {
+        mkdir($target_directory, 0777, true);
+      }
+    }
+    if(empty($file_upload_error_messages)) {
+
+      if(move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
+          // it means photo is uploaded
+      } else {
+        $result_message.="<div class='alert alert-danger'>";
+            $result_message.="<div>Unable to upload photo.</div>";
+            $result_message.="<div>Update the record to upload photo.</div>";
+        $result_message.="</div>";
+      }
+    }
+    else {
+      $result_message.="<div class='alert alert-danger'>";
+        $result_message.="{$file_upload_error_messages}";
+        $result_message.="<div>Update the record to upload photo.</div>";
+    $result_message.="</div>";
+    }
+    return $result_message;
   }
 }
 

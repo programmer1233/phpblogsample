@@ -20,14 +20,18 @@ $page_title = "Read Users";
 include_once 'layout_head.php';
 
 
-$stmt = $user->readAll($from_record_num, $records_per_page);
+echo "<div class='col-md-12'>";
 
-$page_url = "users.php?";
+  $stmt = $user->readAll($from_record_num, $records_per_page);
 
-$total_rows = $user->countAll();
+  $page_url = "read_users.php?";
 
-// include_once "read_users_template.php";
-include_once "read_template.php";
+  $total_rows = $user->countAll();
+
+  include_once "read_users_template.php";
+
+echo "</div>";
+
 
 include 'layout_foot.php';
 
