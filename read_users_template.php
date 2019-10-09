@@ -28,11 +28,11 @@ if($num > 0){
                 <span class='glyphicon glyphicon-list'></span> Read
               </a>
 
-              <a href='update_user?id={$id}' class='btn btn-info left-margin'>
+              <a href='update_user.php?id={$id}' class='btn btn-info left-margin'>
                 <span class='glyphicon glyphicon-edit'></span> Edit
               </a>
 
-              <a delete-id='{$id}' class='btn btn-danger delete-object'>
+              <a delete-id='delete_user.php?id={$id}' class='btn btn-danger delete-object'>
                 <span class='glyphicon glyphicon-remove'></span> Delete
               </a>";
             echo "</td>";
