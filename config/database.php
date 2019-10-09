@@ -3,8 +3,8 @@ class Database {
 
   private $host = "localhost";
   private $db_name = "php_login_system";
-  private $username = "root";
-  private $password = "root";
+  private $username = "";
+  private $password = "";
   private $conn;
 
   // get database credentials
